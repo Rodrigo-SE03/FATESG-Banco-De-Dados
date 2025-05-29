@@ -22,32 +22,28 @@ enc = tiktoken.get_encoding("cl100k_base")          # mesmo tokenizer usado no m
 def n_tokens(text: str) -> int:
     return len(enc.encode(text))
 
-def chunk_text(text: str,
-               max_tokens: int = CHUNK_TOKENS,
-               overlap: int = OVERLAP_TOKENS):
-    """
-    Divide um texto em pedaços <= max_tokens,
-    com overlap tokens entre chunks consecutivos.
-    """
-    words = text.split()
-    chunks, buf = [], []
+# def chunk_text(text: str,
+#                max_tokens: int = CHUNK_TOKENS,
+#                overlap: int = OVERLAP_TOKENS):
+#     words = text.split()
+#     chunks, buf = [], []
 
-    buf_tokens = 0
-    for w in words:
-        tok_len = n_tokens(w)  # em média é 1, mas garante p/ emojis etc.
-        if buf_tokens + tok_len > max_tokens:
-            chunks.append(" ".join(buf))
-            # cria overlap
-            overlap_words = buf[-overlap:] if overlap else []
-            buf = overlap_words + [w]
-            buf_tokens = n_tokens(" ".join(buf))
-        else:
-            buf.append(w)
-            buf_tokens += tok_len
+#     buf_tokens = 0
+#     for w in words:
+#         tok_len = n_tokens(w)  # em média é 1, mas garante p/ emojis etc.
+#         if buf_tokens + tok_len > max_tokens:
+#             chunks.append(" ".join(buf))
+#             # cria overlap
+#             overlap_words = buf[-overlap:] if overlap else []
+#             buf = overlap_words + [w]
+#             buf_tokens = n_tokens(" ".join(buf))
+#         else:
+#             buf.append(w)
+#             buf_tokens += tok_len
 
-    if buf:
-        chunks.append(" ".join(buf))
-    return chunks
+#     if buf:
+#         chunks.append(" ".join(buf))
+#     return chunks
 
 def split_sections(raw: str):
     """
